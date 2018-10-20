@@ -1,6 +1,25 @@
 {
-  "coverage": "0%",
-  "expectCount": 0,
-  "actualCount": 0,
-  "files": {}
+  "coverage": "61.11%",
+  "expectCount": 18,
+  "actualCount": 11,
+  "files": {
+    "js/test.js": {
+      "expectCount": 3,
+      "actualCount": 3,
+      "undocumentLines": []
+    },
+    "js/touchpad.js": {
+      "expectCount": 15,
+      "actualCount": 8,
+      "undocumentLines": [
+        12,
+        15,
+        23,
+        24,
+        27,
+        30,
+        31
+      ]
+    }
+  }
 }
