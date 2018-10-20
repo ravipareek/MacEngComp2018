@@ -48,11 +48,11 @@ console.log('hi')
             dispatchEvent(new CustomEvent('gesture-complete', {detail: item}));
         }
 
-        window.dispatchEnd = () => {
+        window.dispatchEnd = (term) => {
 
             var item = {
                 type: 'gesture',
-                data: 'submit'
+                data: term
             };
 
             dispatchEvent(new CustomEvent('gesture-complete', {detail: item}));
@@ -87,13 +87,20 @@ console.log('hi')
                     window.state = 0
                 }
             } else  if (detail.direction === "LEFT") {
-                if (window.state === 0) {
-                    window.row = 0;
-                    window.col = 0;
-                    window.tap = 0;
-                }
+                    if (window.state === 0) {
+                        window.dispatchEnd('back');
+                        window.row = 0;
+                        window.col = 0;
+                        window.tap = 0;
+                        window.state = 0
+                    } else {
+                        window.row = 0;
+                        window.col = 0;
+                        window.tap = 0;
+                        window.state = 0
+                    }
             } else  if (detail.direction === "UP") {
-                    window.dispatchEnd();
+                    window.dispatchEnd('submit');
                     window.row = 0;
                     window.col = 0;
                     window.tap = 0;
@@ -122,7 +129,19 @@ console.log('hi')
                 }
             }
         } else {
-
+            if (detail.direction === "LEFT") {
+                window.dispatchEnd('delete');
+                window.row = 0;
+                window.col = 0;
+                window.tap = 0;
+                window.state = 0
+            } else if (detail.direction == "UP") {
+                window.dispatchEnd('done');
+                window.row = 0;
+                window.col = 0;
+                window.tap = 0;
+                window.state = 0
+        }
         }
         console.log(detail.direction)
         console.log(window.state);
