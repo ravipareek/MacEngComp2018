@@ -3,17 +3,55 @@
   <head>
     <meta charset="UTF-8">
     <title>Hello World!</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Insert this line above script imports  -->
+<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   </head>
   <body>
-    <h1>Hello World!</h1>
-    <!-- All of the Node.js APIs are available in this renderer process. -->
-    We are using Node.js <script>document.write(process.versions.node)</script>,
-    Chromium <script>document.write(process.versions.chrome)</script>,
-    and Electron <script>document.write(process.versions.electron)</script>.
+      <div class="page-wrapper">
+          <div id="textbox-wrapper">
+              <div id="header">
+                  <img class="settings" src="images/cog-solid.svg" alt="settings">
+                  <h1>MEC 2018</h1>
+              </div>
+              <div id="current-message-wrapper">
+                  Current Message
+                  <div id="current-message"class="message"> </div>
+              </div>
+              <div id="current-word-wrapper">
+                  Current Word
+                  <div id="current-word" class="message"> </div>
+              </div>
+              <div id="predictive">
+                  <div class="vcenter">
+                      <div class="button-settings">
+                          <button id="1" class="predictive-button"> predictive </button>
+                          <button class="predictive-button"> predictive </button>
+                          <button class="predictive-button"> predictive </button>
+                          <button class="predictive-button"> predictive </button>
+
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <div id="touchpad-wrapper">
+              <div id="speak-button">
+                  <button class="green" onclick="speak()">Speak</button>
+              </div>
+              <div id="touchpad">
+                 <canvas id="touchpad-canvas"></canvas>
+              </div>
+          </div>
+      </div>
 
     <script>
       // You can also require other files to run in this process
       require('./renderer.js')
     </script>
+
+    <script src="js/main.js"></script>
   </body>
 </html>
