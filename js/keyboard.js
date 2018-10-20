@@ -27,7 +27,7 @@ class keyboard {
         window.keys[0][2] = ['g', 'h', 'i', '3'];
 
         window.keys[1] = [];
-        window.keys[1][0] = ['j', 'b', 'l', '4'];
+        window.keys[1][0] = ['j', 'k', 'l', '4'];
         window.keys[1][1] = ['m', 'n', 'o', '5'];
         window.keys[1][2] = ['p', 'q', 'r', '6'];
 
@@ -44,6 +44,16 @@ class keyboard {
                 data: window.keys[window.row][window.col][window.tap]
             };
 console.log('hi')
+
+            dispatchEvent(new CustomEvent('gesture-complete', {detail: item}));
+        }
+
+        window.dispatchEnd = () => {
+
+            var item = {
+                type: 'gesture',
+                data: 'submit'
+            };
 
             dispatchEvent(new CustomEvent('gesture-complete', {detail: item}));
         }
@@ -74,6 +84,7 @@ console.log('hi')
                     window.row = 0;
                     window.col = 0;
                     window.tap = 0;
+                    window.state = 0
                 }
             } else  if (detail.direction === "LEFT") {
                 if (window.state === 0) {
@@ -82,6 +93,11 @@ console.log('hi')
                     window.tap = 0;
                 }
             } else  if (detail.direction === "UP") {
+                    window.dispatchEnd();
+                    window.row = 0;
+                    window.col = 0;
+                    window.tap = 0;
+                    window.state = 0
 
             } else  if (detail.direction === "DOWN") {
                 if (window.state === 0) {
@@ -93,6 +109,7 @@ console.log('hi')
                     window.row = 0;
                     window.col = 0;
                     window.tap = 0;
+                    window.state = 0
                 }
             } else  if (detail.direction === "TOUCH") {
                 if (window.state === 0) {
