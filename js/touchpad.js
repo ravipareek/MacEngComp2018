@@ -151,9 +151,10 @@ class touchpad {
     /**
      * Dispactes a gesture event
      * @param {{fingers: number, direction: string}} gesture
+     * @param {boolean} state - true = start, false = end
      */
     dispatchGestureEvent(gesture) {
-        dispatchEvent(new CustomEvent('gestureEvent', {detail:gesture}));
+        dispatchEvent(new CustomEvent('gestureEnded', {detail: gesture}));
     }
 }
 
