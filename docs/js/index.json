@@ -564,6 +564,426 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 48,
+    "kind": "file",
+    "name": "js/test.js",
+    "content": "/**\n * This is Foo.\n */\nexport default class Foo {\n    /**\n     *\n     * @param {number} height - dsadsa\n     * @param {number} width - dsadsavdsa\n     */\n    constructor(height, width) {\n        alert(\"hi\");\n    }\n    /**\n     * @param {number} p - this is p.\n     */\n    method(p){}\n}\n\nnew Foo();\nalert('hi')",
+    "static": true,
+    "longname": "/Users/pavipath/Desktop/MEC/MacEngComp2018/js/test.js",
+    "access": "public",
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 49,
+    "kind": "class",
+    "name": "Foo",
+    "memberof": "js/test.js",
+    "static": true,
+    "longname": "js/test.js~Foo",
+    "access": "public",
+    "export": true,
+    "importPath": "electron-quick-start/js/test.js",
+    "importStyle": "Foo",
+    "description": "This is Foo.",
+    "lineNumber": 4,
+    "interface": false
+  },
+  {
+    "__docId__": 50,
+    "kind": "constructor",
+    "name": "constructor",
+    "memberof": "js/test.js~Foo",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "js/test.js~Foo#constructor",
+    "access": "public",
+    "description": "",
+    "lineNumber": 10,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "number"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "height",
+        "description": "dsadsa"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "number"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "width",
+        "description": "dsadsavdsa"
+      }
+    ]
+  },
+  {
+    "__docId__": 51,
+    "kind": "method",
+    "name": "method",
+    "memberof": "js/test.js~Foo",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "js/test.js~Foo#method",
+    "access": "public",
+    "description": "",
+    "lineNumber": 16,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "number"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "p",
+        "description": "this is p."
+      }
+    ],
+    "return": null
+  },
+  {
+    "__docId__": 52,
+    "kind": "file",
+    "name": "js/touchpad.js",
+    "content": "/**\n * This class handles touch input on a canvas, and processes gestures.\n */\nexport default class touchpad {\n    /**\n     * Gets the canvas associated with the trackpad and normalizes it to prepare it for use.\n     * Also creates a context and prepares variables for tracking.\n     * @param {string} id - index of the canvas element\n     */\n    constructor (id) {\n        //Minimum pixels that need to be moves to acknowledge an event\n        this.gestureThreshold = 25;\n\n\n        this.touchArea = document.getElementById(id);\n\n        // Update canvas bounds and set the internal resolution to match it's size to make drawing work\n        const touchPadBounds = this.touchArea.getBoundingClientRect();\n        this.touchArea.width = touchPadBounds.width;\n        this.touchArea.height = touchPadBounds.height;\n\n        // Touch offset\n        this.offSetX = touchPadBounds.x;\n        this.offSetY = touchPadBounds.y;\n\n        // Get drawing Context\n        this.ctx = this.touchArea.getContext('2d');\n\n        // Total tracking\n        this.gesutureStart = [];\n        this.gesutureEnd = [];\n    };\n\n    /**\n     * Debugs touch input by drawing dots on the screen\n     * @param {TouchEvent} event\n     */\n    touchDebug(event) {\n        var colour = [\"#ff0000\", '#00ff00', '#0000ff', '#ff00ff'];\n        for (var i = 0; i < event.touches.length; i++) {\n            var touch = event.touches[i];\n            this.ctx.beginPath();\n            this.ctx.arc(touch.pageX - this.offSetX, touch.pageY - this.offSetY, 5, 0, 2 * Math.PI, true);\n            this.ctx.strokeStyle = colour[touch.identifier];\n            this.ctx.fill();\n            this.ctx.stroke();\n        }\n    }\n\n    /**\n     * Function that processes the start and end of touch events\n     * @param {TouchEvent} event\n     */\n    touchStart (event) {\n\n        // Use the event's data to call out to the appropriate gesture handlers\n        switch (event.touches.length) {\n            // since a 2 finger start will be after a 1 finger 1 we need to track ti\n            case 2:\n                // Overwrites and startes prepping for two finger input\n                this.gesutureStart = event.touches;\n                break;\n            case 1:\n                this.gesutureStart = event.touches;\n                break;\n        }\n    };\n\n    /**\n     * Function that tracks a fingers progresson\n     * @param {TouchEvent} event\n     */\n    touchEnd (event) {\n        // Use the event's data to call out to the appropriate gesture handlers\n        switch (event.touches.length) {\n            // If one finger on this event then there used to be two fingers, 0 means there was 1\n            case 1, 0:\n                // Since there will be a `0` event occur after the `1 finger` event. we use `gesutureStart` to identify\n                if (this.gesutureStart.length > 0) {\n                    this.dispatchGestureEvent(this.calculateGesture(this.gestureThreshold));\n                }\n        }\n    };\n\n\n    /**\n     * Function that tracks when a finger is removed\n     * @param {TouchEvent} event\n     */\n    touchMove (event) {\n        // Use the event's data to track the current gesture movement\n        this.gesutureEnd = event.touches;\n    };\n\n\n    /**\n     * Function that uses the tracked data to calculate the type of gesture that was completed\n     * @param {number} threshold - the point at which a tap is differentiated from a gesture\n     * @return {{fingers: number, direction: string}} - the number of fingers and the gesture\n     */\n    calculateGesture(threshold) {\n        var gesture = {\n            fingers: 0,\n            direction: \"touch\"\n        };\n        switch(this.gesutureStart.length) {\n            case 2:\n                gesture.fingers = 2;\n                break;\n            case 1:\n                gesture.fingers = 1;\n                break;\n        }\n\n        // Calculate total movement in the x and y, and normalize the finger positions\n        var xDist = [];\n        var yDist = [];\n\n        var xAvgDist = 0;\n        var yAvgDist = 0;\n\n        if (this.gesutureEnd.length > 0) {\n            for (var i = 0; i < gesture.fingers; i++) {\n                xDist[i] = this.gesutureStart[i].clientX - this.gesutureEnd[i].clientX;\n                xDist[i] = Math.abs(xDist[i]) < threshold ? 0 : xDist[i];\n                xAvgDist += xDist[i];\n                yDist[i] = this.gesutureStart[i].clientY - this.gesutureEnd[i].clientY;\n                yDist[i] = Math.abs(yDist[i]) < threshold ? 0 : yDist[i];\n                yAvgDist += yDist[i];\n            }\n        }\n\n        xAvgDist = xAvgDist/gesture.fingers;\n        yAvgDist = yAvgDist/gesture.fingers;\n\n        if (Math.abs(xAvgDist) < threshold && Math.abs(yAvgDist) < threshold) {\n            gesture.direction = \"TOUCH\";\n        } else if (Math.abs(xAvgDist) < Math.abs(yAvgDist)) {\n            gesture.direction = yAvgDist > 0 ? \"UP\" : \"DOWN\";\n        } else {\n            gesture.direction = xAvgDist > 0 ? \"LEFT\" : \"RIGHT\";\n        }\n\n        //Clear the current gesture info\n        this.gesutureStart = [];\n        this.gesutureEnd = [];\n\n        return gesture;\n    }\n\n    /**\n     * Dispactes a gesture event\n     * @param {{fingers: number, direction: string}} gesture\n     */\n    dispatchGestureEvent(gesture) {\n        dispatchEvent(new CustomEvent('gestureEvent', {detail:gesture}));\n    }\n}\n\ndocument.addEventListener(\"DOMContentLoaded\", function() {\n    var canvas = new touchpad(\"touchpad-canvas\");\n\n    canvas.touchArea.addEventListener('touchstart', function (event) {\n        canvas.touchStart(event);\n        canvas.touchDebug(event);\n    }, false);\n\n\n    canvas.touchArea.addEventListener('touchmove', function (event) {\n        canvas.touchMove(event);\n        canvas.touchDebug(event);\n    }, false);\n\n\n    canvas.touchArea.addEventListener('touchend', function (event) {\n        canvas.touchEnd(event);\n        canvas.touchDebug(event);\n    }, false);\n});",
+    "static": true,
+    "longname": "/Users/pavipath/Desktop/MEC/MacEngComp2018/js/touchpad.js",
+    "access": "public",
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 53,
+    "kind": "class",
+    "name": "touchpad",
+    "memberof": "js/touchpad.js",
+    "static": true,
+    "longname": "js/touchpad.js~touchpad",
+    "access": "public",
+    "export": true,
+    "importPath": "electron-quick-start/js/touchpad.js",
+    "importStyle": "touchpad",
+    "description": "This class handles touch input on a canvas, and processes gestures.",
+    "lineNumber": 4,
+    "interface": false
+  },
+  {
+    "__docId__": 54,
+    "kind": "constructor",
+    "name": "constructor",
+    "memberof": "js/touchpad.js~touchpad",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "js/touchpad.js~touchpad#constructor",
+    "access": "public",
+    "description": "Gets the canvas associated with the trackpad and normalizes it to prepare it for use.\nAlso creates a context and prepares variables for tracking.",
+    "lineNumber": 10,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "id",
+        "description": "index of the canvas element"
+      }
+    ]
+  },
+  {
+    "__docId__": 55,
+    "kind": "member",
+    "name": "gestureThreshold",
+    "memberof": "js/touchpad.js~touchpad",
+    "static": false,
+    "longname": "js/touchpad.js~touchpad#gestureThreshold",
+    "access": "public",
+    "description": null,
+    "lineNumber": 12,
+    "undocument": true,
+    "type": {
+      "types": [
+        "number"
+      ]
+    }
+  },
+  {
+    "__docId__": 56,
+    "kind": "member",
+    "name": "touchArea",
+    "memberof": "js/touchpad.js~touchpad",
+    "static": false,
+    "longname": "js/touchpad.js~touchpad#touchArea",
+    "access": "public",
+    "description": null,
+    "lineNumber": 15,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 57,
+    "kind": "member",
+    "name": "offSetX",
+    "memberof": "js/touchpad.js~touchpad",
+    "static": false,
+    "longname": "js/touchpad.js~touchpad#offSetX",
+    "access": "public",
+    "description": null,
+    "lineNumber": 23,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 58,
+    "kind": "member",
+    "name": "offSetY",
+    "memberof": "js/touchpad.js~touchpad",
+    "static": false,
+    "longname": "js/touchpad.js~touchpad#offSetY",
+    "access": "public",
+    "description": null,
+    "lineNumber": 24,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 59,
+    "kind": "member",
+    "name": "ctx",
+    "memberof": "js/touchpad.js~touchpad",
+    "static": false,
+    "longname": "js/touchpad.js~touchpad#ctx",
+    "access": "public",
+    "description": null,
+    "lineNumber": 27,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 60,
+    "kind": "member",
+    "name": "gesutureStart",
+    "memberof": "js/touchpad.js~touchpad",
+    "static": false,
+    "longname": "js/touchpad.js~touchpad#gesutureStart",
+    "access": "public",
+    "description": null,
+    "lineNumber": 30,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*[]"
+      ]
+    }
+  },
+  {
+    "__docId__": 61,
+    "kind": "member",
+    "name": "gesutureEnd",
+    "memberof": "js/touchpad.js~touchpad",
+    "static": false,
+    "longname": "js/touchpad.js~touchpad#gesutureEnd",
+    "access": "public",
+    "description": null,
+    "lineNumber": 31,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*[]"
+      ]
+    }
+  },
+  {
+    "__docId__": 62,
+    "kind": "method",
+    "name": "touchDebug",
+    "memberof": "js/touchpad.js~touchpad",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "js/touchpad.js~touchpad#touchDebug",
+    "access": "public",
+    "description": "Debugs touch input by drawing dots on the screen",
+    "lineNumber": 38,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "TouchEvent"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "event",
+        "description": ""
+      }
+    ],
+    "return": null
+  },
+  {
+    "__docId__": 63,
+    "kind": "method",
+    "name": "touchStart",
+    "memberof": "js/touchpad.js~touchpad",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "js/touchpad.js~touchpad#touchStart",
+    "access": "public",
+    "description": "Function that processes the start and end of touch events",
+    "lineNumber": 54,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "TouchEvent"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "event",
+        "description": ""
+      }
+    ],
+    "return": null
+  },
+  {
+    "__docId__": 66,
+    "kind": "method",
+    "name": "touchEnd",
+    "memberof": "js/touchpad.js~touchpad",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "js/touchpad.js~touchpad#touchEnd",
+    "access": "public",
+    "description": "Function that tracks a fingers progresson",
+    "lineNumber": 73,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "TouchEvent"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "event",
+        "description": ""
+      }
+    ],
+    "return": null
+  },
+  {
+    "__docId__": 67,
+    "kind": "method",
+    "name": "touchMove",
+    "memberof": "js/touchpad.js~touchpad",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "js/touchpad.js~touchpad#touchMove",
+    "access": "public",
+    "description": "Function that tracks when a finger is removed",
+    "lineNumber": 90,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "TouchEvent"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "event",
+        "description": ""
+      }
+    ],
+    "return": null
+  },
+  {
+    "__docId__": 69,
+    "kind": "method",
+    "name": "calculateGesture",
+    "memberof": "js/touchpad.js~touchpad",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "js/touchpad.js~touchpad#calculateGesture",
+    "access": "public",
+    "description": "Function that uses the tracked data to calculate the type of gesture that was completed",
+    "lineNumber": 101,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "number"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "threshold",
+        "description": "the point at which a tap is differentiated from a gesture"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "{fingers: number, direction: string}"
+      ],
+      "spread": false,
+      "description": "the number of fingers and the gesture"
+    }
+  },
+  {
+    "__docId__": 72,
+    "kind": "method",
+    "name": "dispatchGestureEvent",
+    "memberof": "js/touchpad.js~touchpad",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "js/touchpad.js~touchpad#dispatchGestureEvent",
+    "access": "public",
+    "description": "Dispactes a gesture event",
+    "lineNumber": 155,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "{fingers: number, direction: string}"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "gesture",
+        "description": ""
+      }
+    ],
+    "return": null
+  },
+  {
     "kind": "index",
     "content": "# MacEngComp2018",
     "longname": "/Users/pavipath/Desktop/MEC/MacEngComp2018/README.md",

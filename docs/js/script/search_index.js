@@ -1,5 +1,17 @@
 window.esdocSearchIndex = [
   [
+    "electron-quick-start/js/test.js~foo",
+    "class/js/test.js~Foo.html",
+    "<span>Foo</span> <span class=\"search-result-import-path\">electron-quick-start/js/test.js</span>",
+    "class"
+  ],
+  [
+    "electron-quick-start/js/touchpad.js~touchpad",
+    "class/js/touchpad.js~touchpad.html",
+    "<span>touchpad</span> <span class=\"search-result-import-path\">electron-quick-start/js/touchpad.js</span>",
+    "class"
+  ],
+  [
     "js/.external-ecmascript.js~array",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
     "js/.external-ecmascript.js~Array",
@@ -280,5 +292,113 @@ window.esdocSearchIndex = [
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined",
     "js/.external-ecmascript.js~undefined",
     "external"
+  ],
+  [
+    "js/test.js",
+    "file/js/test.js.html",
+    "js/test.js",
+    "file"
+  ],
+  [
+    "js/test.js~foo#constructor",
+    "class/js/test.js~Foo.html#instance-constructor-constructor",
+    "js/test.js~Foo#constructor",
+    "method"
+  ],
+  [
+    "js/test.js~foo#method",
+    "class/js/test.js~Foo.html#instance-method-method",
+    "js/test.js~Foo#method",
+    "method"
+  ],
+  [
+    "js/touchpad.js",
+    "file/js/touchpad.js.html",
+    "js/touchpad.js",
+    "file"
+  ],
+  [
+    "js/touchpad.js~touchpad#calculategesture",
+    "class/js/touchpad.js~touchpad.html#instance-method-calculateGesture",
+    "js/touchpad.js~touchpad#calculateGesture",
+    "method"
+  ],
+  [
+    "js/touchpad.js~touchpad#constructor",
+    "class/js/touchpad.js~touchpad.html#instance-constructor-constructor",
+    "js/touchpad.js~touchpad#constructor",
+    "method"
+  ],
+  [
+    "js/touchpad.js~touchpad#ctx",
+    "class/js/touchpad.js~touchpad.html#instance-member-ctx",
+    "js/touchpad.js~touchpad#ctx",
+    "member"
+  ],
+  [
+    "js/touchpad.js~touchpad#dispatchgestureevent",
+    "class/js/touchpad.js~touchpad.html#instance-method-dispatchGestureEvent",
+    "js/touchpad.js~touchpad#dispatchGestureEvent",
+    "method"
+  ],
+  [
+    "js/touchpad.js~touchpad#gesturethreshold",
+    "class/js/touchpad.js~touchpad.html#instance-member-gestureThreshold",
+    "js/touchpad.js~touchpad#gestureThreshold",
+    "member"
+  ],
+  [
+    "js/touchpad.js~touchpad#gesutureend",
+    "class/js/touchpad.js~touchpad.html#instance-member-gesutureEnd",
+    "js/touchpad.js~touchpad#gesutureEnd",
+    "member"
+  ],
+  [
+    "js/touchpad.js~touchpad#gesuturestart",
+    "class/js/touchpad.js~touchpad.html#instance-member-gesutureStart",
+    "js/touchpad.js~touchpad#gesutureStart",
+    "member"
+  ],
+  [
+    "js/touchpad.js~touchpad#offsetx",
+    "class/js/touchpad.js~touchpad.html#instance-member-offSetX",
+    "js/touchpad.js~touchpad#offSetX",
+    "member"
+  ],
+  [
+    "js/touchpad.js~touchpad#offsety",
+    "class/js/touchpad.js~touchpad.html#instance-member-offSetY",
+    "js/touchpad.js~touchpad#offSetY",
+    "member"
+  ],
+  [
+    "js/touchpad.js~touchpad#toucharea",
+    "class/js/touchpad.js~touchpad.html#instance-member-touchArea",
+    "js/touchpad.js~touchpad#touchArea",
+    "member"
+  ],
+  [
+    "js/touchpad.js~touchpad#touchdebug",
+    "class/js/touchpad.js~touchpad.html#instance-method-touchDebug",
+    "js/touchpad.js~touchpad#touchDebug",
+    "method"
+  ],
+  [
+    "js/touchpad.js~touchpad#touchend",
+    "class/js/touchpad.js~touchpad.html#instance-method-touchEnd",
+    "js/touchpad.js~touchpad#touchEnd",
+    "method"
+  ],
+  [
+    "js/touchpad.js~touchpad#touchmove",
+    "class/js/touchpad.js~touchpad.html#instance-method-touchMove",
+    "js/touchpad.js~touchpad#touchMove",
+    "method"
+  ],
+  [
+    "js/touchpad.js~touchpad#touchstart",
+    "class/js/touchpad.js~touchpad.html#instance-method-touchStart",
+    "js/touchpad.js~touchpad#touchStart",
+    "method"
   ]
 ]
