@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <title>Hello World!</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- Insert this line above script imports  -->
+<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   </head>
   <body>
       <div class="page-wrapper">
@@ -23,7 +27,7 @@
               <div id="predictive">
                   <div class="vcenter">
                       <div class="button-settings">
-                          <button class="predictive-button"> predictive </button>
+                          <button id="1" class="predictive-button"> predictive </button>
                           <button class="predictive-button"> predictive </button>
                           <button class="predictive-button"> predictive </button>
                           <button class="predictive-button"> predictive </button>
@@ -35,7 +39,7 @@
 
           <div id="touchpad-wrapper">
               <div id="speak-button">
-                  <button class="green">Speak</button>
+                  <button class="green" onclick="speak()">Speak</button>
               </div>
               <div id="touchpad">
                  <canvas id="touchpad-canvas"></canvas>
@@ -47,6 +51,7 @@
       // You can also require other files to run in this process
       require('./renderer.js')
     </script>
-        <script src="js/main.js"></script>
+
+    <script src="js/main.js"></script>
   </body>
 </html>
