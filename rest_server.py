@@ -10,7 +10,7 @@ autocomplete.load()
 # for corpus in nltk.corpus.gutenburg.fields():
 #     wp.learn_from_text(nltk.corpus.gurenburg.raw(corpus))
 
-app = Flask(__name__)
+app = Flask("My Rest Server")
 api = Api(app)
 
 
