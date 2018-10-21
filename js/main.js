@@ -108,15 +108,17 @@ function speak(){
 }
 
 $("#current-word").bind("DOMSubtreeModified", function(){
-    var string = "http://127.0.0.1:5000/?previousWord="+sentence+"&currentText="+word;
-    $.get(string, function(list){
-        for (var i=0; i<list.length; i++){
-            var buttonstring = "<button class='predictive-button'>" + list[i] + "</button>";
-            document.getElementById("buttons").innerHTML(buttonstring);
-        }
 
-
-    });
+    if (sentence.split(" ").length > 1){
+        var string = "http://127.0.0.1:5000/?previousWord="+sentence+"&currentText="+word;
+        $.get(string, function(list){
+            document.getElementById("buttons").innerHTML = "";
+            for (var i=0; i<list.length; i++){
+                var buttonstring = "<button class='predictive-button'>" + list[i] + "</button>";
+                document.getElementById("buttons").insertAdjacentHTML("afterBegin",buttonstring);
+            }
+        });
+    }
 });
 
 

@@ -100,7 +100,7 @@ console.log('hi')
                         window.state = 0
                     }
             } else  if (detail.direction === "UP") {
-                    window.dispatchEnd('submit');
+                    window.dispatchEnd('done');
                     window.row = 0;
                     window.col = 0;
                     window.tap = 0;
@@ -136,7 +136,7 @@ console.log('hi')
                 window.tap = 0;
                 window.state = 0
             } else if (detail.direction == "UP") {
-                window.dispatchEnd('done');
+                window.dispatchEnd('submit');
                 window.row = 0;
                 window.col = 0;
                 window.tap = 0;
