@@ -103,8 +103,31 @@ function printsentence(){
 }
 
 function speak(){
-    var audio = new Audio('audio.wav');
-    audio.play();
+
+    var http = new XMLHttpRequest();
+    var url = 'https://stream.watsonplatform.net/text-to-speech/api/v1/synthesize';
+    http.open('POST', url, true);
+
+//Send the proper header information along with the request
+    http.setRequestHeader('Content-type', 'application/json');
+    http.setRequestHeader("Authorization", "Basic " + btoa("377b8f32-195d-474f-88c7-6c6085b76b9a:aFSPXCqJUuU4"));
+    http.setRequestHeader("Accept", "audio/wav");
+
+    http.onreadystatechange = function() {//Call a function when the state changes.
+        if(http.readyState == 4 && http.status == 200) {
+            var binary= convertDataURIToBinary("data:audio/ogg;base64,"+http.responseText);
+            var file = new Blob([binary], {type: 'audio/wav'})
+            var blobUrl = URL.createObjectURL(file);
+            console.log(file);
+            // console.log(http.responseText)
+            var audio = new Audio(blobUrl);
+            audio.play();
+
+        }
+    }
+
+
+    http.send(JSON.stringify({text:"hi"}));
 }
 
 $("#current-word").bind("DOMSubtreeModified", function(){
@@ -122,15 +145,16 @@ $("#current-word").bind("DOMSubtreeModified", function(){
 });
 
 
+
+//
 // $.ajax({
 //     contentType: 'application/json',
 //     accept: 'audio/wav',
 //     type: 'POST',
 //     dataType: 'json',
 //     //async: true,
-//     username: "377b8f32-195d-474f-88c7-6c6085b76b9a",
-//     password: "aFSPXCqJUuU4",
-//     url: 'https://stream.watsonplatform.net/text-to-speech/api/v1/synthesize',
+//
+//     url: '',
 //     data: {
 //        text: sentence
 //     },
