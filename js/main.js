@@ -103,7 +103,7 @@ function printsentence(){
 }
 
 function speak(){
-    talk('Yo My Name is FRANKY')
+    talk(sentence)
 }
 
 $("#current-word").bind("DOMSubtreeModified", function(){
