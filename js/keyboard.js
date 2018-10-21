@@ -43,7 +43,6 @@ class keyboard {
                 type: 'letter',
                 data: window.keys[window.row][window.col][window.tap]
             };
-console.log('hi')
 
             dispatchEvent(new CustomEvent('gesture-complete', {detail: item}));
         }

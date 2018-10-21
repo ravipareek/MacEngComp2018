@@ -103,7 +103,7 @@ function printsentence(){
 }
 
 function speak(){
-    talk(sentence)
+    talk((!!sentence &&sentence.length > 0)  ? sentence : "No Sentence Entered");
 }
 
 $("#current-word").bind("DOMSubtreeModified", function(){

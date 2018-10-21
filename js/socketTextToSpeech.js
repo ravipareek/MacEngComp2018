@@ -16,7 +16,6 @@ function talk(text) {
 
     http.onreadystatechange = function() {//Call a function when the state changes.
         if(http.readyState == 4 && http.status == 200) {
-            console.log(http)
             token = http.responseText;
             wsURI = "wss://stream.watsonplatform.net/text-to-speech/api/v1/synthesize?voice=" +
                 voice + "&watson-token=" + token;
@@ -53,10 +52,7 @@ function socketGetTextToSpeech(text) {
     function onClose(evt) {
         console.log('WebSocket closed', evt.code, evt.reason);
         finalAudio = new Blob(audioParts, {type: format});
-        console.log('final audio: ', finalAudio);
         var blobUrl = URL.createObjectURL(finalAudio);
-        console.log(blobUrl);
-        document.getElementById('test').setAttribute( "href", blobUrl );
         audio = new Audio(blobUrl);
         audio.play();
     }
