@@ -2,7 +2,6 @@ from flask import Flask, request
 from flask_restful import Api,Resource
 # from wordPredictor.word_predictor.word_predictor import WordPredictor
 # import nltk
-
 import autocomplete
 autocomplete.load()
 
@@ -13,15 +12,25 @@ autocomplete.load()
 app = Flask("My Rest Server")
 api = Api(app)
 
+@app.route('/')
+def hello_world():
+    return "Hello World"
 
 class CompleteWord(Resource):
+    import autocomplete
+    autocomplete.load()
 
     def get(self):
+        import autocomplete
+        autocomplete.load()
+
         previousWord = request.args.get('previousWord')
         currentText = request.args.get('currentText')
         suggestionCount = request.args.get('suggestedCount')
         if (suggestionCount == None):
             suggestionCount = 4
+
+        suggestionCount = int(suggestionCount);
 
         results = autocomplete.predict(previousWord, currentText, suggestionCount)
         suggestedWords = []
