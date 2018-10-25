@@ -7,10 +7,13 @@ let mainWindow
 
 function createWindow () {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600})
+  mainWindow = new BrowserWindow({title: "MEC2018", fullscreen: true, resizable: false, show: false, experimentalFeatures:true})
 
-  // and load the index.html of the app.
-  mainWindow.loadFile('index.html')
+  //  Don't show window until ready
+  mainWindow.once('ready-to-show', mainWindow.show);
+
+  // and load the indexElectron.html of the app.
+  mainWindow.loadFile('indexElectron.html')
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()

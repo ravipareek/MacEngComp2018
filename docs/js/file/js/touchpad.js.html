@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">js/touchpad.js | electron-quick-start</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="A minimal Electron application"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="electron-quick-start"><meta property="twitter:description" content="A minimal Electron application"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/electron/electron-quick-start"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/js/test.js~Foo.html">Foo</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/js/touchpad.js~touchpad.html">touchpad</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">js/touchpad.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
+ * This class handles touch input on a canvas, and processes gestures.
+ */
+export default class touchpad {
+    /**
+     * Gets the canvas associated with the trackpad and normalizes it to prepare it for use.
+     * Also creates a context and prepares variables for tracking.
+     * @param {string} id - index of the canvas element
+     */
+    constructor (id) {
+        //Minimum pixels that need to be moves to acknowledge an event
+        this.gestureThreshold = 25;
+
+
+        this.touchArea = document.getElementById(id);
+
+        // Update canvas bounds and set the internal resolution to match it&apos;s size to make drawing work
+        const touchPadBounds = this.touchArea.getBoundingClientRect();
+        this.touchArea.width = touchPadBounds.width;
+        this.touchArea.height = touchPadBounds.height;
+
+        // Touch offset
+        this.offSetX = touchPadBounds.x;
+        this.offSetY = touchPadBounds.y;
+
+        // Get drawing Context
+        this.ctx = this.touchArea.getContext(&apos;2d&apos;);
+
+        // Total tracking
+        this.gesutureStart = [];
+        this.gesutureEnd = [];
+    };
+
+    /**
+     * Debugs touch input by drawing dots on the screen
+     * @param {TouchEvent} event
+     */
+    touchDebug(event) {
+        var colour = [&quot;#ff0000&quot;, &apos;#00ff00&apos;, &apos;#0000ff&apos;, &apos;#ff00ff&apos;];
+        for (var i = 0; i &lt; event.touches.length; i++) {
+            var touch = event.touches[i];
+            this.ctx.beginPath();
+            this.ctx.arc(touch.pageX - this.offSetX, touch.pageY - this.offSetY, 5, 0, 2 * Math.PI, true);
+            this.ctx.strokeStyle = colour[touch.identifier];
+            this.ctx.fill();
+            this.ctx.stroke();
+        }
+    }
+
+    /**
+     * Function that processes the start and end of touch events
+     * @param {TouchEvent} event
+     */
+    touchStart (event) {
+
+        // Use the event&apos;s data to call out to the appropriate gesture handlers
+        switch (event.touches.length) {
+            // since a 2 finger start will be after a 1 finger 1 we need to track ti
+            case 2:
+                // Overwrites and startes prepping for two finger input
+                this.gesutureStart = event.touches;
+                break;
+            case 1:
+                this.gesutureStart = event.touches;
+                break;
+        }
+    };
+
+    /**
+     * Function that tracks a fingers progresson
+     * @param {TouchEvent} event
+     */
+    touchEnd (event) {
+        // Use the event&apos;s data to call out to the appropriate gesture handlers
+        switch (event.touches.length) {
+            // If one finger on this event then there used to be two fingers, 0 means there was 1
+            case 1, 0:
+                // Since there will be a `0` event occur after the `1 finger` event. we use `gesutureStart` to identify
+                if (this.gesutureStart.length &gt; 0) {
+                    this.dispatchGestureEvent(this.calculateGesture(this.gestureThreshold));
+                }
+        }
+    };
+
+
+    /**
+     * Function that tracks when a finger is removed
+     * @param {TouchEvent} event
+     */
+    touchMove (event) {
+        // Use the event&apos;s data to track the current gesture movement
+        this.gesutureEnd = event.touches;
+    };
+
+
+    /**
+     * Function that uses the tracked data to calculate the type of gesture that was completed
+     * @param {number} threshold - the point at which a tap is differentiated from a gesture
+     * @return {{fingers: number, direction: string}} - the number of fingers and the gesture
+     */
+    calculateGesture(threshold) {
+        var gesture = {
+            fingers: 0,
+            direction: &quot;touch&quot;
+        };
+        switch(this.gesutureStart.length) {
+            case 2:
+                gesture.fingers = 2;
+                break;
+            case 1:
+                gesture.fingers = 1;
+                break;
+        }
+
+        // Calculate total movement in the x and y, and normalize the finger positions
+        var xDist = [];
+        var yDist = [];
+
+        var xAvgDist = 0;
+        var yAvgDist = 0;
+
+        if (this.gesutureEnd.length &gt; 0) {
+            for (var i = 0; i &lt; gesture.fingers; i++) {
+                xDist[i] = this.gesutureStart[i].clientX - this.gesutureEnd[i].clientX;
+                xDist[i] = Math.abs(xDist[i]) &lt; threshold ? 0 : xDist[i];
+                xAvgDist += xDist[i];
+                yDist[i] = this.gesutureStart[i].clientY - this.gesutureEnd[i].clientY;
+                yDist[i] = Math.abs(yDist[i]) &lt; threshold ? 0 : yDist[i];
+                yAvgDist += yDist[i];
+            }
+        }
+
+        xAvgDist = xAvgDist/gesture.fingers;
+        yAvgDist = yAvgDist/gesture.fingers;
+
+        if (Math.abs(xAvgDist) &lt; threshold &amp;&amp; Math.abs(yAvgDist) &lt; threshold) {
+            gesture.direction = &quot;TOUCH&quot;;
+        } else if (Math.abs(xAvgDist) &lt; Math.abs(yAvgDist)) {
+            gesture.direction = yAvgDist &gt; 0 ? &quot;UP&quot; : &quot;DOWN&quot;;
+        } else {
+            gesture.direction = xAvgDist &gt; 0 ? &quot;LEFT&quot; : &quot;RIGHT&quot;;
+        }
+
+        //Clear the current gesture info
+        this.gesutureStart = [];
+        this.gesutureEnd = [];
+
+        return gesture;
+    }
+
+    /**
+     * Dispactes a gesture event
+     * @param {{fingers: number, direction: string}} gesture
+     */
+    dispatchGestureEvent(gesture) {
+        dispatchEvent(new CustomEvent(&apos;gestureEvent&apos;, {detail:gesture}));
+    }
+}
+
+document.addEventListener(&quot;DOMContentLoaded&quot;, function() {
+    var canvas = new touchpad(&quot;touchpad-canvas&quot;);
+
+    canvas.touchArea.addEventListener(&apos;touchstart&apos;, function (event) {
+        canvas.touchStart(event);
+        canvas.touchDebug(event);
+    }, false);
+
+
+    canvas.touchArea.addEventListener(&apos;touchmove&apos;, function (event) {
+        canvas.touchMove(event);
+        canvas.touchDebug(event);
+    }, false);
+
+
+    canvas.touchArea.addEventListener(&apos;touchend&apos;, function (event) {
+        canvas.touchEnd(event);
+        canvas.touchDebug(event);
+    }, false);
+});</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
